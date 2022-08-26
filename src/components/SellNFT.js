@@ -1,7 +1,8 @@
 
 import { useState } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
-import Marketplace from '../contracts/ABIs/MarketplaceABI.json';
+import MarketplaceABI from "../contracts/ABIs/MarketplaceABI.json"
+import MarketplaceAddress from "../contracts/Address/MarketplaceAddress.json";
 import { useLocation } from "react-router";
 
 export default function SellNFT () {
@@ -58,13 +59,13 @@ export default function SellNFT () {
         //Upload data to IPFS
         try {
             const metadataURL = await uploadMetadataToIPFS();
-            //After adding your Hardhat network to your metamask, this code will get providers and signers
+            //After adding Hardhat network to metamask, this code will get providers and signers
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
             updateMessage("Please wait.. uploading (upto 5 mins)")
 
             //Pull the deployed contract instance
-            let contract = new ethers.Contract(Marketplace.address, Marketplace.abi, signer)
+            let contract = new ethers.Contract(MarketplaceAddress, MarketplaceABI, signer)
 
             //massage the params to be sent to the create NFT request
             const price = ethers.utils.parseUnits(formParams.price, 'ether')
